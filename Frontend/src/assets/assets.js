@@ -11,12 +11,14 @@ import p7 from './Product7.png'
 import p8 from './Product8.png'
 import p9 from './Product9.jpg'
 import p10 from './Product10.jpg'
+import about from './about.jpg'
 
 
 export const assets = {
     Dani_logo,
     Dani_logo1,
     Hero_img,
+    about,
 }
 export const products = [{
     _id: '0001',
