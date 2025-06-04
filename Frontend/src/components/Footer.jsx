@@ -46,8 +46,8 @@ const Footer = () => {
 
         {/* Social Media Links with Icons */}
         <div className="flex justify-center gap-6 mt-4">
-          <a href="https://github.com/alazar" className="text-gray-600 hover:text-black transition text-2xl"><FaGithub /></a>
-          <a href="https://linkedin.com/in/alazar" className="text-blue-500 hover:text-black transition text-2xl"><FaLinkedin /></a>
+          <a href="https://github.com/alazar10" className="text-gray-600 hover:text-black transition text-2xl"><FaGithub /></a>
+          <a href="https://linkedin.com/in/alazar10" className="text-blue-500 hover:text-black transition text-2xl"><FaLinkedin /></a>
           <a href="https://portfolio.com/alazar" className="text-gray-600 hover:text-black transition text-2xl"><FaGlobe /></a>
         </div>
       </div>
