@@ -1,6 +1,22 @@
 @import url('https://fonts.googleapis.com/css2?family=Prata&display=swap');
 @import "tailwindcss";
 
+.nav-link::after {
+    content: "";
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 0%;
+    height: 2px;
+    background-color: black;
+    transition: width 0.3s ease-in-out;
+}
+
+.nav-link:hover::after {
+    width: 100%;
+}
+
+
 a.active hr{
     display: block;
 }

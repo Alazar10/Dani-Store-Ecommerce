@@ -3,6 +3,26 @@ import { RiExchangeFundsFill } from "react-icons/ri";
 import { MdOutlineSupportAgent, MdEmail, MdPhone } from "react-icons/md";
 
 const OurPolicy = () => {
+
+    const getEmailProvider = (email) => {
+    if (email.includes("@gmail.com")) {
+      return "https://mail.google.com/mail/?view=cm&fs=1&to=support@danistore.com&su=Inquiry&body=Hello, I need assistance...";
+    }
+    if (email.includes("@outlook.com") || email.includes("@hotmail.com")) {
+      return "https://outlook.live.com/mail/deeplink/compose?to=support@danistore.com&subject=Inquiry&body=Hello, I need assistance...";
+    }
+    if (email.includes("@yahoo.com")) {
+      return "https://compose.mail.yahoo.com/?to=support@danistore.com&subject=Inquiry&body=Hello, I need assistance...";
+    }
+    return "mailto:support@danistore.com?subject=Inquiry&body=Hello, I need assistance...";
+  };
+
+  const openEmailApp = () => {
+    const userEmail = "user@example.com"; // Replace with actual detection method
+    const emailURL = getEmailProvider(userEmail);
+    window.open(emailURL, "_blank");
+  };
+  
   return (
     <div className="flex flex-col items-center text-center py-20 text-gray-700 px-6">
       {/* Policy Section */}
@@ -62,7 +82,15 @@ const OurPolicy = () => {
           <div className="bg-gray-100 p-6 rounded-lg shadow-md flex flex-col items-center">
             <MdEmail className="text-3xl text-blue-500 mb-2" />
             <p className="font-medium text-gray-800">📧 Email Us</p>
-            <p className="text-blue-500">support@danistore.com</p>
+            
+            <button 
+      onClick={openEmailApp} 
+      className="text-blue-500 hover:underline cursor-pointer border-none bg-transparent p-0"
+    >
+      support@danistore.com
+    </button>
+
+
           </div>
 
           <div className="bg-gray-100 p-6 rounded-lg shadow-md flex flex-col items-center">

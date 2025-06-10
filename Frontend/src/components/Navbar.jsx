@@ -26,10 +26,11 @@ const Navbar = () => {
             <div className="flex-1 flex justify-center transition-all duration-500">
                 {!searchActive ? (
                     <ul className='hidden sm:flex gap-6 text-sm text-gray-700'>
-                        <NavLink className='hover:text-black transition' to="/">HOME</NavLink>
-                        <NavLink className='hover:text-black transition' to="/collection">COLLECTION</NavLink>
-                        <NavLink className='hover:text-black transition' to="/about">ABOUT</NavLink>
-                        <NavLink className='hover:text-black transition' to="/contact">CONTACT US</NavLink>
+                       <NavLink className="relative hover:text-black transition-all duration-300 before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-[2px] before:bg-black before:opacity-0 before:transition-all before:duration-300 hover:before:w-full hover:before:opacity-100" to="/">HOME</NavLink>
+                        <NavLink className="relative hover:text-black transition-all duration-300 before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-[2px] before:bg-black before:transition-all before:duration-300 hover:before:w-full hover:before:opacity-100" to="/collection">COLLECTION</NavLink>
+                        <NavLink className="relative hover:text-black transition-all duration-300 before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-[2px] before:bg-black before:transition-all before:duration-300 hover:before:w-full hover:before:opacity-100" to="/about">ABOUT</NavLink>
+                        <NavLink className="relative hover:text-black transition-all duration-300 before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-[2px] before:bg-black before:transition-all before:duration-300 hover:before:w-full hover:before:opacity-100" to="/contact">CONTACT US</NavLink>
+
                     </ul>
                 ) : (
                     <div className="relative w-80 sm:w-96">
