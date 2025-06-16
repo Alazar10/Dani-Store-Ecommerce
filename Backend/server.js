@@ -19,7 +19,7 @@ app.use(express.json())
 app.use(cors())
 
 // api endpoints
-app.use('/api/user', userRouter),
+app.use('/api/user', userRouter)
 app.use('/api/product', productRouter)
 
 app.get('/',(req,res)=>{
