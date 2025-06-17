@@ -2,8 +2,8 @@ import React, { useState } from "react";
 import { FaChevronDown, FaChevronUp } from "react-icons/fa";
 
 const Collection = () => {
-  const [showPriceFilter, setShowPriceFilter] = useState(true);
-  const [showCategoryFilter, setShowCategoryFilter] = useState(true);
+  const [showPriceFilter, setShowPriceFilter] = useState(false);
+  const [showCategoryFilter, setShowCategoryFilter] = useState(false);
   const [selectedPrice, setSelectedPrice] = useState("");
   const [selectedCategories, setSelectedCategories] = useState([]);
 
