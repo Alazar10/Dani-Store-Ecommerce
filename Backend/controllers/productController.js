@@ -3,7 +3,7 @@ import productModel from "../models/productModel.js"
 
 const addProduct = async (req, res) => {
   try {
-    const { name, description, price, category, size, quantity } = req.body;
+    const { name, description, price, category, sizes, quantity } = req.body;
 
     // Ensure files exist before accessing them
     const image1 = req.files.image1 && req.files.image1?.[0] 
@@ -25,7 +25,7 @@ const addProduct = async (req, res) => {
       description,
       category,
       price: Number(price),
-      size,
+      sizes,
       image: imagesUrl,
       quantity:Number(quantity),
       date: Date.now() 

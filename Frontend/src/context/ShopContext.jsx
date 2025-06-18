@@ -1,21 +1,38 @@
-import { createContext } from "react";
-import { products } from "../assets/assets";
+import { createContext, useState, useEffect } from "react"
+import axios from "axios"
 
- export const ShopContext = createContext();
+export const ShopContext = createContext()
 
- const ShopContextProvider = (props) => {
-    
-    const currency = 'ETB';
-    const delivery_fee = 100;
+const ShopContextProvider = ({ children }) => {
+  const [products, setProducts] = useState([])
+  const [search, setSearch] = useState("")
+  const currency = "ETB"
+  const delivery_fee = 100
 
-    const value = {
-        currency, delivery_fee, products
+  useEffect(() => {
+    const fetchProducts = async () => {
+      try {
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/product/list`)
+        if (res.data.success) {
+          setProducts(res.data.products || res.data.product || [])
+        }
+      } catch (err) {
+        console.error("Failed to fetch products in context:", err)
+      }
     }
-    return(
-        <ShopContext.Provider value={value}>
-            {props.children}
-        </ShopContext.Provider>
-    )
 
- }
- export default ShopContextProvider
+    fetchProducts()
+  }, [])
+
+  const value = {
+    products,
+    currency,
+    delivery_fee,
+    search,
+    setSearch,
+  }
+
+  return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>
+}
+
+export default ShopContextProvider

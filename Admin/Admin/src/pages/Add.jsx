@@ -10,7 +10,7 @@ const Add = ({ token }) => {
     const [price, setPrice] = useState("")
     const [category, setCategory] = useState("")
     const [customCategory, setCustomCategory] = useState("")
-    const [size, setSize] = useState("")
+    const [sizes, setSizes] = useState("")
     const [quantity, setQuantity] = useState("")
 
     const handleImageChange = (e, index) => {
@@ -28,7 +28,7 @@ const Add = ({ token }) => {
             formData.append("description", description)
             formData.append("price", price)
             formData.append("category", category === "Other" ? customCategory : category)
-            formData.append("size", size)
+            formData.append("sizes", sizes)
             formData.append("quantity", quantity)
 
             images.forEach((img, index) => {
@@ -54,7 +54,7 @@ const Add = ({ token }) => {
                 setPrice("")
                 setCategory("")
                 setCustomCategory("")
-                setSize("")
+                setSizes("")
                 setQuantity("")
                 setImages([null, null, null, null])
             } else {
@@ -168,8 +168,8 @@ const Add = ({ token }) => {
                             className='w-full px-3 py-2 border border-gray-300 rounded-md'
                             type='text'
                             placeholder='XL, 2.27kg,...'
-                            value={size}
-                            onChange={(e) => setSize(e.target.value)}
+                            value={sizes}
+                            onChange={(e) => setSizes(e.target.value)}
                             required
                         />
                     </div>

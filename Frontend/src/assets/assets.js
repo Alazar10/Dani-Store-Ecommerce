@@ -12,6 +12,7 @@ import p8 from './product8.png'
 import p9 from './product9.jpg'
 import p10 from './product10.jpg'
 import about from './about.jpg'
+import star from './star.png'
 
 
 export const assets = {
@@ -19,6 +20,7 @@ export const assets = {
     Dani_logo1,
     Hero_img,
     about,
+    star,
 }
 export const products = [{
     _id: '0001',
