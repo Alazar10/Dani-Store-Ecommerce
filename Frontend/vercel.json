@@ -2,8 +2,8 @@
     "rewrites": [
       {
         "source": "/(.*)",
-        "destination": "/",
-        "rootDirectory": "Frontend"
+        "destination": "/"
+        
       }
     ]
   }
