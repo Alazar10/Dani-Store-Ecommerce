@@ -1,5 +1,5 @@
 import React from 'react'
-import { Routes, Route} from 'react-router-dom'
+import { Routes, Route } from 'react-router-dom'
 import Home from './pages/Home'
 import Collection from './pages/Collection'
 import About from './pages/About'
@@ -12,25 +12,37 @@ import Orders from './pages/Orders'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
 import ScrollToTop from './components/ScrollUp'
+import { ToastContainer, toast } from 'react-toastify'
+import 'react-toastify/dist/ReactToastify.css'
+import { GoogleOAuthProvider } from '@react-oauth/google'
+import LoginSuccess from './components/LoginSuccess'
+
+
 
 const App = () => {
   return (
-    <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
-      <Navbar/> 
-      <ScrollToTop/>
-      <Routes>
-        <Route path='/' element={<Home/>}/>
-        <Route path='/collection' element={<Collection/>}/>
-        <Route path='/about' element={<About/>}/>
-        <Route path='/contact' element={<Contact/>}/>
-        <Route path='/product/:productId' element={<Product/>}/>
-        <Route path='/cart' element={<Cart/>}/>
-        <Route path='/login' element={<Login/>}/>
-        <Route path='/place-order' element={<PlaceOrder/>}/>
-        <Route path='/orders' element={<Orders/>}/>
-      </Routes>
-      <Footer/>
-    </div>
+    <GoogleOAuthProvider clientId="98744752679-m4j7pd64vfb095as4ookv586rst9afaf.apps.googleusercontent.com">
+      <div className='px-4 sm:px-[5vw] md:px-[7vw] lg:px-[9vw]'>
+        <ToastContainer />
+        <Navbar />
+        <ScrollToTop />
+        <Routes>
+          <Route path='/' element={<Home />} />
+          <Route path='/collection' element={<Collection />} />
+          <Route path='/about' element={<About />} />
+          <Route path='/contact' element={<Contact />} />
+          <Route path='/product/:productId' element={<Product />} />
+          <Route path='/cart' element={<Cart />} />
+          <Route path="/login-success" element={<LoginSuccess />} />
+
+          <Route path='/login' element={<Login />} />
+          <Route path='/place-order' element={<PlaceOrder />} />
+          <Route path='/orders' element={<Orders />} />
+        </Routes>
+        <Footer />
+      </div>
+    </GoogleOAuthProvider>
+
   )
 }
 

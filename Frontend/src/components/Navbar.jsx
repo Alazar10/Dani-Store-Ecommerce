@@ -5,11 +5,23 @@ import { FaSearch, FaShoppingCart, FaTimes } from "react-icons/fa";
 import { CgProfile } from "react-icons/cg";
 import { GiHamburgerMenu } from "react-icons/gi";
 import { IoChevronBack } from "react-icons/io5";
+import { useContext } from 'react';
+import { ShopContext } from '../context/ShopContext';
 
 const Navbar = () => {
     const [visible, setVisible] = useState(false);
     const [searchActive, setSearchActive] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
+    const { setShowSearch, getCartCount, navigate, token, setToken, setCartItems } = useContext(ShopContext);
+
+    const logout = () => {
+        localStorage.removeItem('token')
+        localStorage.removeItem('cartItems') // optional: clear cart too
+        setToken('')
+        setCartItems({})
+        navigate('/login')
+    }
+
 
     const handleSearch = () => {
         console.log("Searching for:", searchQuery);
@@ -26,7 +38,7 @@ const Navbar = () => {
             <div className="flex-1 flex justify-center transition-all duration-500">
                 {!searchActive ? (
                     <ul className='hidden sm:flex gap-6 text-sm text-gray-700'>
-                       <NavLink className="relative hover:text-black transition-all duration-300 before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-[2px] before:bg-black before:opacity-0 before:transition-all before:duration-300 hover:before:w-full hover:before:opacity-100" to="/">HOME</NavLink>
+                        <NavLink className="relative hover:text-black transition-all duration-300 before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-[2px] before:bg-black before:opacity-0 before:transition-all before:duration-300 hover:before:w-full hover:before:opacity-100" to="/">HOME</NavLink>
                         <NavLink className="relative hover:text-black transition-all duration-300 before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-[2px] before:bg-black before:transition-all before:duration-300 hover:before:w-full hover:before:opacity-100" to="/collection">COLLECTION</NavLink>
                         <NavLink className="relative hover:text-black transition-all duration-300 before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-[2px] before:bg-black before:transition-all before:duration-300 hover:before:w-full hover:before:opacity-100" to="/about">ABOUT</NavLink>
                         <NavLink className="relative hover:text-black transition-all duration-300 before:absolute before:-bottom-1 before:left-0 before:w-0 before:h-[2px] before:bg-black before:transition-all before:duration-300 hover:before:w-full hover:before:opacity-100" to="/contact">CONTACT US</NavLink>
@@ -42,8 +54,8 @@ const Navbar = () => {
                             className="w-full border border-black rounded-lg px-4 py-2 outline-none focus:border-gray-700 transition-all duration-500"
                             autoFocus
                         />
-                        <button 
-                            onClick={handleSearch} 
+                        <button
+                            onClick={handleSearch}
                             className="absolute right-3 top-2 text-black text-lg hover:text-gray-700 transition"
                         >
                             <FaSearch />
@@ -61,9 +73,21 @@ const Navbar = () => {
 
                 {/* Profile Dropdown */}
                 <div className={`group relative ${searchActive ? "hidden" : "block"}`}>
-                    <div className='w-5 text-2xl cursor-pointer'>
+
+                    <div onClick={() => token ? null : navigate('/login')} className='w-5 text-2xl cursor-pointer'>
                         <CgProfile />
+                        {
+                            token &&
+                            <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4'>
+                                <div className='flex flex-col gap-2 w-36 py-3 px-5 bg-slate-100 text-gray-500 text-sm'>
+                                    <p className='cursor-pointer hover:text-black'>My Profile</p>
+                                    <p onClick={() => navigate('/orders')} className='cursor-pointer hover:text-black'>Orders</p>
+                                    <p onClick={logout} className='cursor-pointer hover:text-black'>Logout</p>
+                                </div>
+                            </div>
+                        }
                     </div>
+
                 </div>
 
                 {/* Shopping Cart */}
@@ -71,7 +95,7 @@ const Navbar = () => {
                     <div className='w-5 min-w-5 text-xl'>
                         <FaShoppingCart />
                     </div>
-                    <p className='absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]'>10</p>
+                    <p className='absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]'>{getCartCount()}</p>
                 </Link>
 
                 {/* Mobile Hamburger Menu */}
@@ -88,9 +112,9 @@ const Navbar = () => {
                         <IoChevronBack />
                         <p>Back</p>
                     </div>
-                    
+
                     {/* Sidebar Links */}
-                    <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border hover:bg-gray-100 transition' to="/">HOME</NavLink> 
+                    <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border hover:bg-gray-100 transition' to="/">HOME</NavLink>
                     <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border hover:bg-gray-100 transition' to="/collection">COLLECTION</NavLink>
                     <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border hover:bg-gray-100 transition' to="/about">ABOUT</NavLink>
                     <NavLink onClick={() => setVisible(false)} className='py-3 pl-6 border hover:bg-gray-100 transition' to="/contact">CONTACT US</NavLink>

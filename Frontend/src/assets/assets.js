@@ -13,6 +13,8 @@ import p9 from './product9.jpg'
 import p10 from './product10.jpg'
 import about from './about.jpg'
 import star from './star.png'
+import bin from './bin.png'
+import chapa from './chapa.png'
 
 
 export const assets = {
@@ -21,6 +23,8 @@ export const assets = {
     Hero_img,
     about,
     star,
+    bin,
+    chapa
 }
 export const products = [{
     _id: '0001',

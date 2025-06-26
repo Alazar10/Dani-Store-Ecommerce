@@ -5,6 +5,8 @@ import order_icon from './order_button.png'
 import upload_img from './upload.jpg'
 import upload_img1 from './upload1.jpg'
 import upload1 from './upload1.png'
+import parcel from './parcel.jpg'
+import not from './not.jpg'
 
 export const assets = {
     Dani_logo,
@@ -13,5 +15,7 @@ export const assets = {
     order_icon,
     upload_img,
     upload_img1,
-    upload1
+    upload1,
+    parcel, 
+    not
 }
