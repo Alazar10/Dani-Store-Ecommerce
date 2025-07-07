@@ -1,136 +1,146 @@
+// src/pages/Login.jsx
 import React, { useState, useContext, useEffect } from 'react'
-import { useLocation } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
-import axios from 'axios'
-import { toast } from 'react-toastify'
+import publicApi from '../api/publicApi'
 import { ShopContext } from '../context/ShopContext'
+import { toast } from 'react-toastify'
 
 const Login = () => {
-  const [currentState, setCurrentState] = useState('Login')
-  const { token, setToken, navigate, backendUrl } = useContext(ShopContext)
+  const navigate = useNavigate()
   const location = useLocation()
+  const { token, setToken } = useContext(ShopContext)
 
+  const [mode, setMode] = useState('Login') // 'Login' or 'Sign Up'
   const [name, setName] = useState('')
-  const [password, setPassword] = useState('')
   const [email, setEmail] = useState('')
+  const [password, setPassword] = useState('')
 
+  // If we just logged out, reset form
   useEffect(() => {
     if (location.state?.fromLogout) {
+      setMode('Login')
       setName('')
       setEmail('')
       setPassword('')
-      setCurrentState('Login')
     }
   }, [location.state])
 
+  // If already authed, redirect home
   useEffect(() => {
-    if (token) {
-      navigate('/')
-    }
-  }, [token])
+    if (token) navigate('/')
+  }, [token, navigate])
 
-  const onSubmitHandler = async (e) => {
+  const onSubmit = async (e) => {
     e.preventDefault()
     try {
-      if (currentState === 'Sign Up') {
-        const response = await axios.post(`${backendUrl}/api/user/register`, { name, email, password })
-        if (response.data.success) {
-          setToken(response.data.token)
-          localStorage.setItem('token', response.data.token)
-        } else {
-          toast.error(response.data.message)
-        }
+      let res
+      if (mode === 'Sign Up') {
+        res = await publicApi.post('/user/register', { name, email, password })
       } else {
-        const response = await axios.post(`${backendUrl}/api/user/login`, { email, password })
-        if (response.data.success) {
-          setToken(response.data.token)
-          localStorage.setItem('token', response.data.token)
-        } else {
-          toast.error(response.data.message)
-        }
+        res = await publicApi.post('/user/login',    { email, password })
       }
-    } catch (error) {
-      console.log(error)
-      toast.error(error.message)
+
+      if (res.data.success && res.data.token) {
+        setToken(res.data.token)
+        toast.success(`${mode} successful!`)
+        navigate('/')
+      } else {
+        toast.error(res.data.message || `${mode} failed.`)
+      }
+    } catch (err) {
+      console.error('Auth error:', err)
+      toast.error(err.response?.data?.message || err.message || 'Something went wrong.')
     }
   }
 
-  const handleGoogleAuth = async (credentialResponse) => {
+  const onGoogleSuccess = async (googleResp) => {
     try {
-      const googleToken = credentialResponse.credential
-      const res = await axios.post(`${backendUrl}/api/user/google-auth`, { token: googleToken })
-      if (res.data.success) {
+      const googleToken = googleResp.credential
+      const res = await publicApi.post('/user/google-auth', { token: googleToken })
+
+      if (res.data.success && res.data.token) {
         setToken(res.data.token)
-        localStorage.setItem('token', res.data.token)
+        toast.success('Login via Google successful!')
         navigate('/')
       } else {
-        toast.error(res.data.message || "Google auth failed.")
+        toast.error(res.data.message || 'Google login failed.')
       }
     } catch (err) {
-      console.error(err)
-      toast.error("Google login error.")
+      console.error('Google auth error:', err)
+      toast.error('Google login error.')
     }
   }
 
   return (
     <form
-      onSubmit={onSubmitHandler}
-      className='flex flex-col items-center w-[90%] sm:max-w-96 m-auto mt-14 gap-4 text-gray-800'
+      onSubmit={ onSubmit }
+      className="flex flex-col items-center w-[90%] sm:max-w-md m-auto mt-14 gap-4 text-gray-800"
     >
-      <div className='inline-flex items-center gap-2 mb-2 mt-10'>
-        <p className='prata-regular text-3xl'>{currentState}</p>
-        <hr className='border-none h-[1.5px] w-8 bg-gray-800' />
+      <div className="inline-flex items-center gap-2 mb-2 mt-10">
+        <h2 className="text-3xl font-medium">{mode}</h2>
+        <hr className="border-none h-[1px] w-8 bg-gray-800" />
       </div>
 
-      {currentState === 'Login' ? null : (
+      {mode === 'Sign Up' && (
         <input
-          onChange={(e) => setName(e.target.value)}
+          type="text"
+          placeholder="Name"
           value={name}
-          type='text'
-          className='w-full px-3 py-2 border border-gray-800'
-          placeholder='Name'
+          onChange={e => setName(e.target.value)}
           required
+          className="w-full px-3 py-2 border border-gray-800"
         />
       )}
 
       <input
-        onChange={(e) => setEmail(e.target.value)}
+        type="email"
+        placeholder="Email"
         value={email}
-        type='email'
-        className='w-full px-3 py-2 border border-gray-800'
-        placeholder='Email'
+        onChange={e => setEmail(e.target.value)}
         required
-      />
-      <input
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-        type='password'
-        className='w-full px-3 py-2 border border-gray-800'
-        placeholder='Password'
-        required
+        className="w-full px-3 py-2 border border-gray-800"
       />
 
-      <div className='w-full flex justify-between text-sm mt-[-8px]'>
-        <p className='cursor-pointer'>Forgot your password?</p>
-        {currentState === 'Login' ? (
-          <p onClick={() => setCurrentState('Sign Up')} className='cursor-pointer'>Create account</p>
+      <input
+        type="password"
+        placeholder="Password"
+        value={password}
+        onChange={e => setPassword(e.target.value)}
+        required
+        className="w-full px-3 py-2 border border-gray-800"
+      />
+
+      <div className="w-full flex justify-between text-sm -mt-2">
+        <p className="cursor-pointer">Forgot your password?</p>
+        {mode === 'Login' ? (
+          <p onClick={() => setMode('Sign Up')} className="cursor-pointer">
+            Create account
+          </p>
         ) : (
-          <p onClick={() => setCurrentState('Login')} className='cursor-pointer'>Login Here</p>
+          <p onClick={() => setMode('Login')} className="cursor-pointer">
+            Back to Login
+          </p>
         )}
       </div>
 
-      <button className='bg-black text-white font-light px-8 py-2 mt-4'>
-        {currentState === 'Login' ? 'Sign In' : 'Sign Up'}
+      <button
+        type="submit"
+        className="bg-black text-white font-light px-8 py-2 mt-4"
+      >
+        {mode === 'Login' ? 'Sign In' : 'Sign Up'}
       </button>
 
-      <div className='mt-4 w-full flex flex-col items-center'>
-        {currentState === 'Login' ? (
+      <div className="mt-4 w-full flex flex-col items-center">
+        {mode === 'Login' ? (
           <GoogleLogin
-            onSuccess={handleGoogleAuth}
-            onError={() => toast.error("Google login failed.")}
+            onSuccess={ onGoogleSuccess }
+            onError={() => toast.error('Google login failed.')}
           />
         ) : (
-          <p className='text-xs text-gray-500'>You can sign up faster by logging in with Google above first.</p>
+          <p className="text-xs text-gray-500 text-center">
+            You can sign up faster by logging in with Google above first.
+          </p>
         )}
       </div>
     </form>

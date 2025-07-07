@@ -15,7 +15,7 @@ const Cart = () => {
         if (cartItems[productId][sizeLabel] > 0) {
           tempData.push({
             _id: productId,
-            sizes: sizeLabel,
+            size: sizeLabel,
             quantity: cartItems[productId][sizeLabel]
           })
         }
@@ -35,7 +35,7 @@ const Cart = () => {
           const productData = products.find((p) => p._id === item._id)
           if (!productData) return null
 
-          const sizeData = productData.sizes?.find((s) => s.label === item.sizes)
+          const sizeData = productData.sizes?.find((s) => s.label === item.size)
 
           return (
             <div
@@ -51,7 +51,7 @@ const Cart = () => {
                       {sizeData?.price || productData.price} {currency}
                     </p>
                     <p className="px-2 sm:px-3 sm:py-1 text-xs sm:text-sm border rounded bg-slate-50">
-                      {item.sizes}
+                      {item.size}
                     </p>
                   </div>
                 </div>
@@ -63,13 +63,13 @@ const Cart = () => {
                 defaultValue={item.quantity}
                 onChange={(e) => {
                   const val = Number(e.target.value)
-                  if (val > 0) updateQuantity(item._id, item.sizes, val)
+                  if (val > 0) updateQuantity(item._id, item.size, val)
                 }}
                 className="border max-w-10 sm:max-w-20 px-1 sm:px-2 py-1"
               />
 
               <img
-                onClick={() => updateQuantity(item._id, item.sizes, 0)}
+                onClick={() => updateQuantity(item._id, item.size, 0)}
                 className="w-4 mr-4 sm:w-5 cursor-pointer"
                 src={assets.bin}
                 alt="remove"

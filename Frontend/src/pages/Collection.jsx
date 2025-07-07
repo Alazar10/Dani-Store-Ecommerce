@@ -29,7 +29,7 @@ const Collection = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/product/list`)
+        const res = await axios.get(`${import.meta.env.VITE_BACKEND_URL}/api/shop/products`)
         if (res.data.success) {
           setProducts(res.data.products || res.data.product || [])
         }

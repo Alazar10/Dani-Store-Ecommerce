@@ -1,4 +1,3 @@
-// src/hooks/useNotifications.js
 import { useState, useEffect } from 'react'
 import axios from 'axios'
 import { backendUrl } from '../App'
@@ -7,27 +6,35 @@ function useNotifications(token) {
   const [notes, setNotes] = useState([])
 
   const fetchNotes = async () => {
-    const { data } = await axios.get(
-      `${backendUrl}/api/notifications`,
-      { headers:{ Authorization:`Bearer ${token}` } }
-    )
-    if (data.success) setNotes(data.notifications)
+    try {
+      const { data } = await axios.get(
+        `${backendUrl}/api/notifications`,
+        { headers: { token } }
+      )
+      if (data.success) setNotes(data.notifications)
+    } catch (err) {
+      console.error('Notification fetch failed:', err)
+    }
   }
 
   const markRead = async (id) => {
-    await axios.post(
-      `${backendUrl}/api/notifications/read/${id}`,
-      {},
-      { headers:{ Authorization:`Bearer ${token}` } }
-    )
-    setNotes(ns => ns.filter(n => n._id !== id))
+    try {
+      await axios.post(
+        `${backendUrl}/api/notifications/read/${id}`,
+        {},
+        { headers: { token } }
+      )
+      setNotes(prev => prev.filter(n => n._id !== id))
+    } catch (err) {
+      console.error('Mark read failed:', err)
+    }
   }
 
   useEffect(() => {
     if (!token) return
     fetchNotes()
-    const iv = setInterval(fetchNotes, 60*1000)   // poll every minute
-    return () => clearInterval(iv)
+    const interval = setInterval(fetchNotes, 60000)
+    return () => clearInterval(interval)
   }, [token])
 
   return { notes, markRead }

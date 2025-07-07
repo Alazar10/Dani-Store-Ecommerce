@@ -69,8 +69,13 @@ const addProduct = async (req, res) => {
 const listProduct = async(req, res)=>{
   try{
 
+    console.log("🧪 /product/list hit")
+    console.log("🔍 Headers received:", req.headers)
+
     const products = await productModel.find({});
     res.json({ success: true, product: products })
+    
+
 
 
   } catch(error){

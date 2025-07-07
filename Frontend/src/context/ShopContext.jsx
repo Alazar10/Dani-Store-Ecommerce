@@ -19,9 +19,9 @@ const ShopContextProvider = ({ children }) => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const res = await axios.get(`${backendUrl}/api/product/list`)
+        const res = await axios.get(`${backendUrl}/api/shop/products`)
         if (res.data.success) {
-          setProducts(res.data.products || res.data.product || [])
+          setProducts(res.data.products || [])
         }
       } catch (err) {
         console.error("Failed to fetch products:", err)
@@ -30,6 +30,7 @@ const ShopContextProvider = ({ children }) => {
     }
     fetchProducts()
   }, [])
+
 
   // ✅ Sync cart with backend
   const getUserCart = async (token) => {
@@ -56,13 +57,6 @@ const ShopContextProvider = ({ children }) => {
     if (localToken) getUserCart(localToken)
   }, [])
 
-  useEffect(() => {
-    if (token) {
-      getUserCart(token)
-    }
-  }, [token])
-
-
   // ✅ Always persist cart to localStorage
   useEffect(() => {
     localStorage.setItem("cartItems", JSON.stringify(cartItems))
@@ -75,18 +69,29 @@ const ShopContextProvider = ({ children }) => {
       return
     }
 
+    if (!token) {
+    toast.error("Please log in to add items to your cart.")
+    navigate('/login')
+    return
+  }
+
+    // Update local cart state
     const cartData = structuredClone(cartItems)
     if (!cartData[itemId]) cartData[itemId] = {}
     cartData[itemId][sizeLabel] = (cartData[itemId][sizeLabel] || 0) + 1
     setCartItems(cartData)
 
+    // Sync with backend
     if (token) {
       try {
         await axios.post(`${backendUrl}/api/cart/add`, {
-          itemId,
-          size: sizeLabel
+          productId: itemId,       // ✅ match backend param name
+          size: sizeLabel,
+          quantity: 1              // ✅ always include quantity
         }, {
-          headers: { token }
+          headers: {
+            Authorization: `Bearer ${token}` // ✅ proper auth header
+          }
         })
       } catch (error) {
         console.error("Cart sync failed:", error)
@@ -95,30 +100,34 @@ const ShopContextProvider = ({ children }) => {
     }
   }
 
+
   const updateQuantity = async (itemId, size, quantity) => {
-    const sizeLabel = typeof size === "string" ? size : size?.label
-    if (!sizeLabel) return
+  const sizeLabel = typeof size === "string" ? size : size?.label
+  if (!sizeLabel || typeof quantity !== "number" || quantity < 0) return
 
-    const cartData = structuredClone(cartItems)
-    if (!cartData[itemId]) cartData[itemId] = {}
-    cartData[itemId][sizeLabel] = quantity
-    setCartItems(cartData)
+  const cartData = structuredClone(cartItems)
+  if (!cartData[itemId]) cartData[itemId] = {}
+  cartData[itemId][sizeLabel] = quantity
+  setCartItems(cartData)
 
-    if (token) {
-      try {
-        await axios.post(`${backendUrl}/api/cart/update`, {
-          itemId,
-          size: sizeLabel,
-          quantity
-        }, {
-          headers: { token }
-        })
-      } catch (error) {
-        console.error("Failed to update quantity:", error)
-        toast.error("Could not update cart item.")
-      }
+  if (token && quantity > 0) {
+    try {
+      console.log("🧪 Sending update:", { productId: itemId, size: sizeLabel, quantity })
+      await axios.post(`${backendUrl}/api/cart/update`, {
+        productId: itemId,
+        size: sizeLabel,
+        quantity
+      }, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      })
+    } catch (error) {
+      console.error("Failed to update quantity:", error)
+      toast.error("Could not update cart item.")
     }
   }
+}
 
   // ✅ Validate products before counting
   const getCartCount = () => {

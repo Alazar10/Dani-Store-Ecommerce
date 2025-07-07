@@ -12,12 +12,25 @@ const Product = () => {
 
   useEffect(() => {
     if (products.length === 0) return
-    const selected = products.find((item) => item._id === productId)
+    const selected = products.find(item => item._id?.toString() === productId)
     if (selected) {
       setProductData(selected)
-      setImage(Array.isArray(selected.image) ? selected.image[0] : selected.image)
+      const firstImage = Array.isArray(selected.image) && selected.image.length > 0
+        ? selected.image[0]
+        : assets.placeholder || ''
+      setImage(firstImage)
     }
   }, [productId, products])
+
+  const handleAddToCart = () => {
+    if (!size) return
+    console.log("🛒 Adding to cart:", {
+      productId: productData._id,
+      sizeLabel: size.label,
+      quantity: 1
+    })
+    addToCart(productData._id, size)
+  }
 
   if (!productData) return <div className="opacity-0">Loading product...</div>
 
@@ -26,19 +39,17 @@ const Product = () => {
       <div className="flex flex-col sm:flex-row gap-10">
         {/* Image Section */}
         <div className="flex-1 flex flex-col-reverse sm:flex-row gap-4 h-[600px]">
-          {/* Thumbnails */}
           <div className="sm:h-full sm:w-[18%] flex sm:flex-col gap-2 sm:gap-4 overflow-x-auto sm:overflow-y-auto">
-            {productData.image.map((item, index) => (
+            {productData.image.map((img, i) => (
               <img
-                key={index}
-                src={item}
-                onClick={() => setImage(item)}
+                key={i}
+                src={img}
+                onClick={() => setImage(img)}
                 className="w-[80px] h-[80px] object-cover rounded-md border cursor-pointer hover:scale-105 transition"
               />
             ))}
           </div>
 
-          {/* Main Image */}
           <div className="w-full sm:w-[82%] overflow-hidden rounded-md shadow-md group">
             <img
               src={image}
@@ -48,7 +59,7 @@ const Product = () => {
           </div>
         </div>
 
-        {/* Product Info Section */}
+        {/* Info Section */}
         <div className="flex-1 h-[600px] overflow-y-auto pr-4">
           <h1 className="text-3xl sm:text-4xl font-semibold text-black">{productData.name}</h1>
 
@@ -78,8 +89,8 @@ const Product = () => {
                         key={i}
                         onClick={() => setSize(s)}
                         className={`px-3 py-1 border rounded text-sm ${size?.label === s.label
-                            ? 'bg-black text-white'
-                            : 'border-gray-400 text-gray-600 hover:border-black'
+                          ? 'bg-black text-white'
+                          : 'border-gray-400 text-gray-600 hover:border-black'
                           }`}
                       >
                         {s.label}
@@ -87,12 +98,12 @@ const Product = () => {
                     ))}
                 </div>
               ) : (
-                <p className="text-red-500 text-sm font-medium mt-1">Currently Out of Stock. Coming Soon.</p>
+                <p className="text-red-500 text-sm font-medium mt-1">
+                  Currently Out of Stock. Coming Soon.
+                </p>
               )}
             </div>
           )}
-
-
 
           {size?.stock !== undefined && (
             <p className="text-sm text-gray-600 mt-2">
@@ -101,7 +112,7 @@ const Product = () => {
           )}
 
           <button
-            onClick={() => addToCart(productData._id, size)}
+            onClick={handleAddToCart}
             disabled={!size || size.stock === 0}
             className={`font-light px-8 py-2 mt-6 rounded transition duration-150 ease-in-out ${size && size.stock > 0
               ? 'bg-black text-white hover:bg-gray-800 active:scale-95 active:bg-gray-900'
