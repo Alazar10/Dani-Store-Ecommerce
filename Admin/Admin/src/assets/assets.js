@@ -7,7 +7,7 @@ import upload_img1 from './upload1.jpg'
 import upload1 from './upload1.png'
 import parcel from './parcel.jpg'
 import not from './not.jpg'
-
+import message from './message.png'
 export const assets = {
     Dani_logo,
     add_icon,
@@ -17,5 +17,6 @@ export const assets = {
     upload_img1,
     upload1,
     parcel, 
-    not
+    not,
+    message
 }

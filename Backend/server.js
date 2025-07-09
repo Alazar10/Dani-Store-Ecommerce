@@ -12,6 +12,8 @@ import productRouter from './routes/productRoute.js'
 import cartRouter from './routes/callRoute.js'   
 import orderRouter from './routes/orderRoute.js'
 import notificationRouter from './routes/notificationRoutes.js'
+import newsletterRoute from './routes/newsletterRoute.js'
+import contactRoute from './routes/contactRoute.js'
 
 // Models for cron logic
 import orderModel from './models/orderModel.js'
@@ -64,6 +66,11 @@ app.use('/api/cart', cartRouter)
 app.use('/api/order', orderRouter)
 app.use('/api/notifications', notificationRouter)
 app.use('/api/shop', shopRouter)
+
+app.use('/api/contact', contactRoute)
+app.use('/api/newsletter', newsletterRoute)
+
+
 
 app.get('/', (req, res) => res.send('API Working'))
 

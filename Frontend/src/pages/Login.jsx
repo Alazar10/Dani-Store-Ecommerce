@@ -9,14 +9,14 @@ import { toast } from 'react-toastify'
 const Login = () => {
   const navigate = useNavigate()
   const location = useLocation()
-  const { token, setToken } = useContext(ShopContext)
+  const { token, setToken, setUser } = useContext(ShopContext)
 
   const [mode, setMode] = useState('Login') // 'Login' or 'Sign Up'
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  // If we just logged out, reset form
+  // Reset form if redirected from logout
   useEffect(() => {
     if (location.state?.fromLogout) {
       setMode('Login')
@@ -26,7 +26,7 @@ const Login = () => {
     }
   }, [location.state])
 
-  // If already authed, redirect home
+  // Redirect if already logged in
   useEffect(() => {
     if (token) navigate('/')
   }, [token, navigate])
@@ -38,11 +38,20 @@ const Login = () => {
       if (mode === 'Sign Up') {
         res = await publicApi.post('/user/register', { name, email, password })
       } else {
-        res = await publicApi.post('/user/login',    { email, password })
+        res = await publicApi.post('/user/login', { email, password })
       }
 
       if (res.data.success && res.data.token) {
+        const user = res.data.user || { email } // fallback if backend doesn't return user
+
+        // ✅ Save to localStorage
+        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('user', JSON.stringify(user))
+
+        // ✅ Update context
         setToken(res.data.token)
+        setUser(user)
+
         toast.success(`${mode} successful!`)
         navigate('/')
       } else {
@@ -60,7 +69,16 @@ const Login = () => {
       const res = await publicApi.post('/user/google-auth', { token: googleToken })
 
       if (res.data.success && res.data.token) {
+        const user = res.data.user || { email: res.data.email }
+
+        // ✅ Save to localStorage
+        localStorage.setItem('token', res.data.token)
+        localStorage.setItem('user', JSON.stringify(user))
+
+        // ✅ Update context
         setToken(res.data.token)
+        setUser(user)
+
         toast.success('Login via Google successful!')
         navigate('/')
       } else {
@@ -74,7 +92,7 @@ const Login = () => {
 
   return (
     <form
-      onSubmit={ onSubmit }
+      onSubmit={onSubmit}
       className="flex flex-col items-center w-[90%] sm:max-w-md m-auto mt-14 gap-4 text-gray-800"
     >
       <div className="inline-flex items-center gap-2 mb-2 mt-10">
@@ -134,7 +152,7 @@ const Login = () => {
       <div className="mt-4 w-full flex flex-col items-center">
         {mode === 'Login' ? (
           <GoogleLogin
-            onSuccess={ onGoogleSuccess }
+            onSuccess={onGoogleSuccess}
             onError={() => toast.error('Google login failed.')}
           />
         ) : (

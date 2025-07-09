@@ -38,7 +38,7 @@ function SidebarNotifications({ token }) {
   // Poll for new notifications every minute
   useEffect(() => {
     fetchNotes()
-    const interval = setInterval(fetchNotes, 60000)
+    const interval = setInterval(fetchNotes, 10000)
     return () => clearInterval(interval)
   }, [token])
 

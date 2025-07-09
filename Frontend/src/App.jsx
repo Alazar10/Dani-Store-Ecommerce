@@ -16,6 +16,7 @@ import { ToastContainer, toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import { GoogleOAuthProvider } from '@react-oauth/google'
 import LoginSuccess from './components/LoginSuccess'
+import SearchResults from './pages/SearchResults'
 
 
 
@@ -37,6 +38,7 @@ const App = () => {
           <Route path='/login' element={<Login />} />
           <Route path='/place-order' element={<PlaceOrder />} />
           <Route path='/orders' element={<Orders />} />
+          <Route path="/search-results" element={<SearchResults />} />
         </Routes>
         <Footer />
       </div>

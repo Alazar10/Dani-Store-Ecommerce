@@ -9,7 +9,7 @@ function useNotifications(token) {
     try {
       const { data } = await axios.get(
         `${backendUrl}/api/notifications`,
-        { headers: { token } }
+        { headers: { Authorization: `Bearer ${token}` } }
       )
       if (data.success) setNotes(data.notifications)
     } catch (err) {
@@ -22,7 +22,7 @@ function useNotifications(token) {
       await axios.post(
         `${backendUrl}/api/notifications/read/${id}`,
         {},
-        { headers: { token } }
+        { headers: { Authorization: `Bearer ${token}` } }
       )
       setNotes(prev => prev.filter(n => n._id !== id))
     } catch (err) {

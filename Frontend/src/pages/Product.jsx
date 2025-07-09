@@ -9,7 +9,7 @@ const Product = () => {
   const [productData, setProductData] = useState(null)
   const [image, setImage] = useState('')
   const [size, setSize] = useState(null)
-
+  
   useEffect(() => {
     if (products.length === 0) return
     const selected = products.find(item => item._id?.toString() === productId)
