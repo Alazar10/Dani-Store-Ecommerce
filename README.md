@@ -11,8 +11,11 @@ Access the deployed frontend here: 👉 https://dani-store-ecommerce-uylc.vercel
 🧑‍💻 Frontend (React + Vite + Tailwind CSS)
 
 Responsive UI: Fully responsive design optimized for desktop and mobile
+
 Custom Branding: Styled using dark black and dark orange, aligned with Dani Store’s brand identity
+
 Dynamic Routing: Handles protected routes for admin pages and dynamic redirects post-payment
+
 Success Receipt Page: Branded /orders/success page verifies transactions and displays user-friendly confirmation
 
 🛠️ Backend (Node.js + Express + MongoDB)
@@ -40,8 +43,11 @@ Verified receipt is shown with transaction details and thank-you message
 Layer	Technologies
 
 Frontend:	React, Vite, Tailwind CSS, React Router
+
 Backend:	Node.js, Express, MongoDB, Nodemailer
+
 Payment:	Chapa Gateway (Callback + Verification API)
+
 Deployment:	Vercel (Frontend), Vercel (Backend deployment)
 
 📂 Folder Structure Highlights
