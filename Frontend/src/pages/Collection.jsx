@@ -74,7 +74,7 @@ const Collection = () => {
     <div className="flex flex-col sm:flex-row gap-4 sm:gap-10 pt-10 border-t px-6">
       {/* Mobile FILTERS Toggle */}
       <div
-        className="text-xl font-semibold mb-4 flex items-center justify-between sm:hidden cursor-pointer"
+        className="text-xl font-semibold mb-4 flex items-center justify-between sm:hidden cursor-pointer text-[#333333]"
         onClick={() => setShowMobileFilters(!showMobileFilters)}
       >
         <span>FILTERS</span>
@@ -84,10 +84,10 @@ const Collection = () => {
       {/* Filters Section */}
       <div className={`min-w-60 transition-all duration-300 ${showMobileFilters ? "block" : "hidden"} sm:block`}>
         {/* Price Filter */}
-        <div className="border border-gray-300 pl-5 py-3 mt-4">
+        <div className="border border-[#333333] pl-5 py-3 mt-4 rounded-md">
           <button
             onClick={() => setShowPriceFilter(!showPriceFilter)}
-            className="flex items-center justify-between w-full text-sm font-medium cursor-pointer"
+            className="flex items-center justify-between w-full text-sm font-semibold text-[#333333] cursor-pointer"
           >
             PRICE RANGE {showPriceFilter ? <FaChevronUp /> : <FaChevronDown />}
           </button>
@@ -100,14 +100,14 @@ const Collection = () => {
               <label
                 key={index}
                 className={`flex gap-2 cursor-pointer p-2 rounded ${
-                  selectedPrice === price.label ? "bg-blue-100 text-blue-700" : ""
+                  selectedPrice === price.label ? "bg-[#FFF3E5] text-[#FF8C00]" : "text-[#333333]"
                 }`}
                 onClick={() => setSelectedPrice(price.label)}
               >
                 <input
                   type="radio"
                   name="price"
-                  className="w-4 accent-blue-500"
+                  className="w-4 accent-[#FF8C00]"
                   checked={selectedPrice === price.label}
                   onChange={() => setSelectedPrice(price.label)}
                 />
@@ -118,10 +118,10 @@ const Collection = () => {
         </div>
 
         {/* Category Filter */}
-        <div className="border border-gray-300 pl-5 py-3 mt-4">
+        <div className="border border-[#333333] pl-5 py-3 mt-4 rounded-md">
           <button
             onClick={() => setShowCategoryFilter(!showCategoryFilter)}
-            className="flex items-center justify-between w-full text-sm font-medium cursor-pointer"
+            className="flex items-center justify-between w-full text-sm font-semibold text-[#333333] cursor-pointer"
           >
             CATEGORIES {showCategoryFilter ? <FaChevronUp /> : <FaChevronDown />}
           </button>
@@ -134,13 +134,13 @@ const Collection = () => {
               <label
                 key={index}
                 className={`flex gap-2 cursor-pointer p-2 rounded ${
-                  selectedCategories.includes(category) ? "bg-blue-100 text-blue-700" : ""
+                  selectedCategories.includes(category) ? "bg-[#FFF3E5] text-[#FF8C00]" : "text-[#333333]"
                 }`}
                 onClick={() => handleCategoryChange(category)}
               >
                 <input
                   type="checkbox"
-                  className="w-4 accent-blue-500"
+                  className="w-4 accent-[#FF8C00]"
                   checked={selectedCategories.includes(category)}
                   onChange={() => handleCategoryChange(category)}
                 />
@@ -153,10 +153,10 @@ const Collection = () => {
 
       {/* Product Sorting + Title + Grid */}
       <div className="flex-1">
-        <div className="flex justify-between text-base sm:text-2xl mb-4">
+        <div className="flex justify-between text-base sm:text-2xl mb-4 items-center text-[#333333]">
           <Title text1="ALL" text2="COLLECTIONS" />
           <select
-            className="border-2 border-gray-300 text-sm px-2"
+            className="border-2 border-[#333333] text-sm px-2 py-1 rounded-md outline-none"
             value={sortOption}
             onChange={(e) => setSortOption(e.target.value)}
           >
@@ -167,9 +167,9 @@ const Collection = () => {
         </div>
 
         {loading ? (
-          <p>Loading products...</p>
+          <p className="text-[#333333]">Loading products...</p>
         ) : filteredProducts.length === 0 ? (
-          <p>No products match your filters.</p>
+          <p className="text-[#333333]">No products match your filters.</p>
         ) : (
           <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
             {filteredProducts.map((item) => (

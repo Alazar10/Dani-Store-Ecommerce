@@ -9,7 +9,6 @@ const Home = () => {
   return (
     <div>
         <Hero/>
-        <BestProducts/>
         <OurPolicy/>
         <Location/>
         <Newsletter/>

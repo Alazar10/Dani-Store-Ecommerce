@@ -227,7 +227,7 @@ const Add = ({ token }) => {
         <div className="flex justify-center mt-6">
           <button
             type="submit"
-            className="w-28 py-3 rounded-md bg-black text-white hover:bg-gray-800 active:scale-95 transition"
+            className="w-28 py-3 rounded-md bg-[#FF8C00] text-white hover:bg-gray-800 active:scale-95 transition"
           >
             Add
           </button>

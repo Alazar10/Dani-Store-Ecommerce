@@ -10,6 +10,7 @@ import Login from './components/Login'
 import { ToastContainer, toast  } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css'
 import AdminMessages from './pages/AdminMessages'
+import Notifier from './pages/Notifier'
 
 export const backendUrl = import.meta.env.VITE_BACKEND_URL
 export const currency = 'ETB'
@@ -39,6 +40,7 @@ const App = () => {
               <Route path='/orders' element={<Orders token={token}/> }/>
               <Route path="/update/:id" element={<Update token={token} />} />
               <Route path="/messages" element={<AdminMessages token={token} />} />
+              <Route path="/notifier" element={<Notifier token={token} />} />
             </Routes>
           </div>
         </div>

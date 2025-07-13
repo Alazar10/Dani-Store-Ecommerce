@@ -8,6 +8,7 @@ import upload1 from './upload1.png'
 import parcel from './parcel.jpg'
 import not from './not.jpg'
 import message from './message.png'
+import notifier from './notifier.jpg'
 export const assets = {
     Dani_logo,
     add_icon,
@@ -18,5 +19,6 @@ export const assets = {
     upload1,
     parcel, 
     not,
-    message
+    message,
+    notifier
 }

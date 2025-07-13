@@ -20,6 +20,9 @@ import orderModel from './models/orderModel.js'
 import Notification from './models/notificationModel.js'
 import authUser from './middleware/auth.js'
 import shopRouter from './routes/shopRoute.js'
+import notifierRouter from './routes/notifierRoute.js'
+import userNotificationRouter from './routes/userNotificationRoute.js'
+import chapaRouter from './routes/paymentRoutes.js'
 
 
 
@@ -69,6 +72,11 @@ app.use('/api/shop', shopRouter)
 
 app.use('/api/contact', contactRoute)
 app.use('/api/newsletter', newsletterRoute)
+
+app.use('/api/notify', notifierRouter)
+app.use('/api/user-notify', userNotificationRouter)
+app.use('/api/payment', chapaRouter)
+
 
 
 

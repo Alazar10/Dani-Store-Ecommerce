@@ -50,8 +50,10 @@ const Sidebar = ({ token }) => {
                 </NavLink>
 
 
-
-
+                <NavLink className={linkClasses} to="/notifier">
+                    <img className="w-7 h-7" src={assets.notifier} alt="Orders" />
+                    <p className="hidden md:block">Notifier</p>
+                </NavLink>
 
 
                 <div className={linkClasses}>

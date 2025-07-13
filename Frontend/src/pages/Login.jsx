@@ -1,4 +1,3 @@
-// src/pages/Login.jsx
 import React, { useState, useContext, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { GoogleLogin } from '@react-oauth/google'
@@ -11,12 +10,11 @@ const Login = () => {
   const location = useLocation()
   const { token, setToken, setUser } = useContext(ShopContext)
 
-  const [mode, setMode] = useState('Login') // 'Login' or 'Sign Up'
+  const [mode, setMode] = useState('Login')
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
-  // Reset form if redirected from logout
   useEffect(() => {
     if (location.state?.fromLogout) {
       setMode('Login')
@@ -26,7 +24,6 @@ const Login = () => {
     }
   }, [location.state])
 
-  // Redirect if already logged in
   useEffect(() => {
     if (token) navigate('/')
   }, [token, navigate])
@@ -42,16 +39,11 @@ const Login = () => {
       }
 
       if (res.data.success && res.data.token) {
-        const user = res.data.user || { email } // fallback if backend doesn't return user
-
-        // ✅ Save to localStorage
+        const user = res.data.user || { email }
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('user', JSON.stringify(user))
-
-        // ✅ Update context
         setToken(res.data.token)
         setUser(user)
-
         toast.success(`${mode} successful!`)
         navigate('/')
       } else {
@@ -67,18 +59,12 @@ const Login = () => {
     try {
       const googleToken = googleResp.credential
       const res = await publicApi.post('/user/google-auth', { token: googleToken })
-
       if (res.data.success && res.data.token) {
         const user = res.data.user || { email: res.data.email }
-
-        // ✅ Save to localStorage
         localStorage.setItem('token', res.data.token)
         localStorage.setItem('user', JSON.stringify(user))
-
-        // ✅ Update context
         setToken(res.data.token)
         setUser(user)
-
         toast.success('Login via Google successful!')
         navigate('/')
       } else {
@@ -93,11 +79,11 @@ const Login = () => {
   return (
     <form
       onSubmit={onSubmit}
-      className="flex flex-col items-center w-[90%] sm:max-w-md m-auto mt-14 gap-4 text-gray-800"
+      className="flex flex-col items-center w-[90%] sm:max-w-md m-auto mt-14 gap-4 text-[#333333]"
     >
       <div className="inline-flex items-center gap-2 mb-2 mt-10">
-        <h2 className="text-3xl font-medium">{mode}</h2>
-        <hr className="border-none h-[1px] w-8 bg-gray-800" />
+        <h2 className="text-3xl font-medium text-[#FF8C00]">{mode}</h2>
+        <hr className="border-none h-[1px] w-8 bg-[#FF8C00]" />
       </div>
 
       {mode === 'Sign Up' && (
@@ -107,7 +93,7 @@ const Login = () => {
           value={name}
           onChange={e => setName(e.target.value)}
           required
-          className="w-full px-3 py-2 border border-gray-800"
+          className="w-full px-3 py-2 border border-[#333333] text-[#333333] rounded-lg"
         />
       )}
 
@@ -117,7 +103,7 @@ const Login = () => {
         value={email}
         onChange={e => setEmail(e.target.value)}
         required
-        className="w-full px-3 py-2 border border-gray-800"
+        className="w-full px-3 py-2 border border-[#333333] text-[#333333] rounded-lg"
       />
 
       <input
@@ -126,17 +112,17 @@ const Login = () => {
         value={password}
         onChange={e => setPassword(e.target.value)}
         required
-        className="w-full px-3 py-2 border border-gray-800"
+        className="w-full px-3 py-2 border border-[#333333] text-[#333333] rounded-lg"
       />
 
-      <div className="w-full flex justify-between text-sm -mt-2">
-        <p className="cursor-pointer">Forgot your password?</p>
+      <div className="w-full flex justify-between text-sm -mt-2 text-[#333333]">
+        <p className="cursor-pointer hover:text-[#FF8C00] transition">Forgot your password?</p>
         {mode === 'Login' ? (
-          <p onClick={() => setMode('Sign Up')} className="cursor-pointer">
+          <p onClick={() => setMode('Sign Up')} className="cursor-pointer hover:text-[#FF8C00] transition">
             Create account
           </p>
         ) : (
-          <p onClick={() => setMode('Login')} className="cursor-pointer">
+          <p onClick={() => setMode('Login')} className="cursor-pointer hover:text-[#FF8C00] transition">
             Back to Login
           </p>
         )}
@@ -144,7 +130,7 @@ const Login = () => {
 
       <button
         type="submit"
-        className="bg-black text-white font-light px-8 py-2 mt-4"
+        className="bg-[#FF8C00] hover:bg-orange-500 text-white font-medium px-8 py-2 mt-4 rounded-lg transition"
       >
         {mode === 'Login' ? 'Sign In' : 'Sign Up'}
       </button>
@@ -156,7 +142,7 @@ const Login = () => {
             onError={() => toast.error('Google login failed.')}
           />
         ) : (
-          <p className="text-xs text-gray-500 text-center">
+          <p className="text-xs text-[#555555] text-center">
             You can sign up faster by logging in with Google above first.
           </p>
         )}

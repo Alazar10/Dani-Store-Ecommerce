@@ -8,5 +8,21 @@ export default defineConfig({
     react(),
     tailwindcss(),
   ],
-  server:{port: 5173}
+  server: {
+    port: 5173,
+    open: true,
+    fs: {
+      allow: ['..']
+    }
+  },
+  build: {
+    rollupOptions: {
+      input: 'index.html'
+    }
+  },
+  resolve: {
+    alias: {
+      '@': '/src' // Optional shortcut for cleaner imports
+    }
+  }
 })

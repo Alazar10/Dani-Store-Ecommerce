@@ -8,14 +8,60 @@ export const ShopContext = createContext()
 const ShopContextProvider = ({ children }) => {
   const [products, setProducts] = useState([])
   const [search, setSearch] = useState("")
-  const [searchResults, setSearchResults] = useState([]) // ✅ new state
+  const [searchResults, setSearchResults] = useState([])
   const [cartItems, setCartItems] = useState({})
   const [token, setToken] = useState('')
   const [user, setUser] = useState(null)
+  const [userId, setUserId] = useState(null)
+  const [notificationCount, setNotificationCount] = useState(0)
+
   const navigate = useNavigate()
   const backendUrl = import.meta.env.VITE_BACKEND_URL
   const currency = "ETB"
   const delivery_fee = 100
+
+  // ✅ Fetch userId from backend token payload
+  useEffect(() => {
+    const fetchUserId = async () => {
+      try {
+        const res = await axios.get(`${backendUrl}/api/user/me`, {
+          headers: { Authorization: `Bearer ${token}` }
+        })
+        if (res.data.success) setUserId(res.data.userId)
+      } catch (err) {
+        console.error("❌ Failed to fetch user ID:", err)
+      }
+    }
+
+    if (token) fetchUserId()
+  }, [token])
+
+  // ✅ Refresh notification count (called manually + via polling)
+  const refreshNotificationCount = async () => {
+    try {
+      const res = await axios.get(`${backendUrl}/api/user-notify/count`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+      if (res.data.success) setNotificationCount(res.data.count)
+    } catch (err) {
+      console.error("🔔 Failed to refresh notification count:", err)
+    }
+  }
+
+  // ✅ Initial count fetch
+  useEffect(() => {
+    if (token) refreshNotificationCount()
+  }, [token])
+
+  // ✅ Poll for new notifications every 10 seconds
+  useEffect(() => {
+    if (!token) return
+    const interval = setInterval(() => {
+      refreshNotificationCount()
+    }, 10000)
+
+    return () => clearInterval(interval)
+  }, [token])
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -91,7 +137,6 @@ const ShopContextProvider = ({ children }) => {
       if (!cartData[itemId]) cartData[itemId] = {}
       cartData[itemId][sizeLabel] = (cartData[itemId][sizeLabel] || 0) + 1
       setCartItems(cartData)
-
     } catch (error) {
       console.error("Cart sync failed:", error)
       toast.error(error.response?.data?.message || "Cart sync failed.")
@@ -141,7 +186,6 @@ const ShopContextProvider = ({ children }) => {
     for (const productId in cartItems) {
       const productExists = products.find(p => p._id === productId)
       if (!productExists) continue
-
       for (const size in cartItems[productId]) {
         count += cartItems[productId][size]
       }
@@ -175,8 +219,8 @@ const ShopContextProvider = ({ children }) => {
     products,
     search,
     setSearch,
-    searchResults,       
-    setSearchResults,    
+    searchResults,
+    setSearchResults,
     cartItems,
     setCartItems,
     addToCart,
@@ -191,6 +235,9 @@ const ShopContextProvider = ({ children }) => {
     setToken,
     user,
     setUser,
+    userId,
+    notificationCount,
+    refreshNotificationCount,
     logoutUser
   }
 
