@@ -53,19 +53,33 @@ Deployment:	Vercel (Frontend), Vercel (Backend deployment)
 📂 Folder Structure Highlights
 bash
 ├── Frontend/
+
 │   ├── src/
+
 │   │   ├── components/
+
 │   │   ├── pages/
+
 │   │   │   └── OrdersSuccess.jsx
+
 │   │   └── App.jsx
+
 │
+
 ├── Backend/
+
 │   ├── controllers/
+
 │   │   └── paymentController.js
+
 │   │   └── paymentVerifyController.js
+
 │   ├── routes/
+
 │   │   └── paymentRoutes.js
+
 │   └── .env
+
 
 🙌 Author
 
