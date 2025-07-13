@@ -14,7 +14,7 @@ const Footer = () => {
             Elevate your fitness journey with premium-quality gear designed for strength, endurance, and performance. At <strong>Dani Store</strong>, we believe in pushing limits and unlocking your full potential. Train smart, perform better, and achieve greatness with us!
           </p>
         </div>
-
+        
         {/* Quick Links */}
         <div>
           <h3 className="font-semibold mb-4 text-white">Quick Links</h3>
